@@ -1,0 +1,48 @@
+###
+GET http://localhost:3001
+
+
+###
+POST http://localhost:3001/api/v1/user
+Content-Type: application/json
+
+{
+  "name": "sandesh",
+  "username": "sundesz@gmail.com",
+  "password": "sandesh"
+}
+
+
+
+###
+GET http://localhost:3001/api/v1/pages
+Cookie: connect.sid=s%3AadQidXLLEWo2VSISJxvAbLTP6-K31mll.I0N%2BkU5f0QkIPKp8TC0nFs8uxQy5RTNoerFDrmbOPtc
+
+###
+GET http://localhost:3001/api/v1/pages?urlkey=footer
+###
+GET http://localhost:3001/api/v1/pages?urlkey=footer1
+
+
+###
+POST http://localhost:3001/api/v1/pages
+Content-Type: application/json
+
+{
+  "name": "sandesh test",
+  "content": "sandesh",
+  "status": "footer"
+}
+
+###
+PUT http://localhost:3001/api/v1/pages/a83feca5-0196-493d-a3cf-06362e7ac9fa
+Content-Type: application/json
+
+{
+  "name": "sandesh",
+  "content": "sandesh",
+  "status": "header"
+}
+
+###
+DELETE http://localhost:3001/api/v1/pages/a83feca5-0196-493d-a3cf-06362e7ac9fa

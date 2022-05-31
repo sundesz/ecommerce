@@ -1,0 +1,12 @@
+POST http://localhost:3001/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "username": "sundesz@gmail.com",
+  "password": "sandesh"
+}
+
+
+###
+POST http://localhost:3001/api/v1/auth/logout
+Cookie: connect.sid=s%3Abu5lhHnSQpJhVhKrRhMfvKEYh2Zsf7Z2.2LVfaR4rJ984cCC7QGkuLrngvs3fn89gE6t8p02qSm0

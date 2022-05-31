@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "outDir": "./dist/",
+    "module": "commonjs",
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+
+    "noImplicitReturns": false,
+    "noFallthroughCasesInSwitch": true,
+    "esModuleInterop": true,
+
+    "baseUrl": "./src",
+    "paths": {
+      "@middleware/*": ["middleware/*"]
+    }
+  },
+  "exclude": ["node_modules"]
+}

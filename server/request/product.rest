@@ -1,0 +1,13 @@
+
+
+###
+GET http://localhost:3001/api/v1/product_categories?urlkey=tv-and-video
+
+
+###
+GET http://localhost:3001/api/v1/product_images/82604ecc-ecca-4ca5-88cb-d79060e33a85
+
+
+
+###
+GET http://localhost:3001/api/v1/products?urlkey=procaster-tv
