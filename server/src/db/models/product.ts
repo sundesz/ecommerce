@@ -1,6 +1,7 @@
 import { Model, DataTypes } from 'sequelize';
 import { IProductAttributes, ProductInput } from '../types/product';
 import { sequelize } from '../index';
+import slugify from 'slugify';
 
 class Product
   extends Model<IProductAttributes, ProductInput>
@@ -67,5 +68,13 @@ Product.init(
     tableName: 'product',
   }
 );
+
+const generateSlug = (name: string) => slugify(name, { lower: true });
+
+Product.beforeValidate(function (product) {
+  if (product.name) {
+    product.urlKey = generateSlug(product.name);
+  }
+});
 
 export default Product;

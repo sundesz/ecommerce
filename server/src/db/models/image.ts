@@ -1,23 +1,21 @@
 import { Model, DataTypes } from 'sequelize';
-import {
-  IProductImageAttributes,
-  ProductImageInput,
-} from '../types/productImage';
+import { IImageAttributes, ImageInput } from '../types/image';
 import { sequelize } from '../index';
 
-class ProductImage
-  extends Model<IProductImageAttributes, ProductImageInput>
-  implements IProductImageAttributes
+class Image
+  extends Model<IImageAttributes, ImageInput>
+  implements IImageAttributes
 {
   public id!: string;
   public productId!: string;
-  public imageName!: string;
+  public productCategoryId!: string;
+  public name!: string;
   public fileLocation!: string;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
 
-ProductImage.init(
+Image.init(
   {
     id: {
       type: DataTypes.UUID,
@@ -27,12 +25,17 @@ ProductImage.init(
     },
     productId: {
       type: DataTypes.UUID,
-      allowNull: false,
+      allowNull: true,
       references: { model: 'product', key: 'id' },
     },
-    imageName: {
-      type: DataTypes.STRING,
+    productCategoryId: {
+      type: DataTypes.UUID,
       allowNull: true,
+      references: { model: 'productCategory', key: 'id' },
+    },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
     fileLocation: {
       type: DataTypes.STRING,
@@ -44,8 +47,8 @@ ProductImage.init(
     underscored: true,
     timestamps: true,
     freezeTableName: true,
-    tableName: 'product_image',
+    tableName: 'image',
   }
 );
 
-export default ProductImage;
+export default Image;

@@ -4,13 +4,14 @@ import {
   ProductCategoryInput,
 } from '../types/productCategory';
 import { sequelize } from '../index';
+import slugify from 'slugify';
 
 class ProductCategory
   extends Model<IProductCategoryAttributes, ProductCategoryInput>
   implements IProductCategoryAttributes
 {
   public id!: string;
-  public categoryName!: string;
+  public name!: string;
   public urlKey!: string;
 
   public readonly createdAt!: Date;
@@ -25,7 +26,7 @@ ProductCategory.init(
       allowNull: false,
       primaryKey: true,
     },
-    categoryName: {
+    name: {
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
@@ -43,5 +44,13 @@ ProductCategory.init(
     tableName: 'product_category',
   }
 );
+
+ProductCategory.beforeValidate(function (productCategory) {
+  if (productCategory.name) {
+    productCategory.urlKey = generateSlug(productCategory.name);
+  }
+});
+
+const generateSlug = (name: string) => slugify(name, { lower: true });
 
 export default ProductCategory;

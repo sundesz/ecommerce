@@ -2,7 +2,7 @@ import authenticationRouter from './authentication';
 import pageRouter from './pages';
 import productRouter from './product';
 import productCategoryRouter from './productCategory';
-import productImageRouter from './productImage';
+import imageRouter from './image';
 import userRouter from './user';
 
 export {
@@ -10,6 +10,6 @@ export {
   pageRouter,
   productRouter,
   productCategoryRouter,
-  productImageRouter,
+  imageRouter,
   userRouter,
 };

@@ -1,5 +1,6 @@
 import { NextFunction, RequestHandler } from 'express';
-import { Product, ProductCategory, ProductImage } from '../../db/models';
+import { Sequelize } from 'sequelize';
+import { Product, ProductCategory, Image } from '../../db/models';
 // import ProductCategory from '../../db/models/productCategory';
 
 const getProducts: RequestHandler = async (req, res, next: NextFunction) => {
@@ -11,16 +12,24 @@ const getProducts: RequestHandler = async (req, res, next: NextFunction) => {
       where = { urlKey: queryUrlKey };
     }
 
+    // https://stackoverflow.com/questions/42226351/sequelize-join-with-multiple-column
     const product = await Product.findAll({
-      attributes: { exclude: ['createdAt', 'updatedAt', 'productCategoryId'] },
+      attributes: { exclude: ['createdAt', 'updatedAt'] },
       include: [
         {
-          model: ProductImage,
-          attributes: ['imageName', 'fileLocation'],
+          model: Image,
+          attributes: ['name', 'fileLocation'],
         },
         {
           model: ProductCategory,
-          attributes: ['categoryName', 'urlKey'],
+          on: {
+            col1: Sequelize.where(
+              Sequelize.col('Product.product_category_id'),
+              '=',
+              Sequelize.col('ProductCategory.id')
+            ),
+          },
+          attributes: ['name', 'urlKey'],
         },
       ],
       where,

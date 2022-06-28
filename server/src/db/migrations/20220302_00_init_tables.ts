@@ -93,7 +93,7 @@ export const up: Migration = async ({
         isEmail: true,
       },
     },
-    address: {
+    street: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -108,6 +108,10 @@ export const up: Migration = async ({
         min: 5,
         max: 5,
       },
+    },
+    countrycode: {
+      type: DataTypes.STRING,
+      defaultValue: 'FI',
     },
     created_at: {
       type: DataTypes.DATE,
@@ -128,7 +132,7 @@ export const up: Migration = async ({
       allowNull: false,
       primaryKey: true,
     },
-    category_name: {
+    name: {
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
@@ -201,7 +205,7 @@ export const up: Migration = async ({
     },
   });
 
-  await queryInterface.createTable('product_image', {
+  await queryInterface.createTable('image', {
     id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
@@ -210,10 +214,15 @@ export const up: Migration = async ({
     },
     product_id: {
       type: DataTypes.UUID,
-      allowNull: false,
+      allowNull: true,
       references: { model: 'product', key: 'id' },
     },
-    image_name: {
+    product_category_id: {
+      type: DataTypes.UUID,
+      allowNull: true,
+      references: { model: 'product_category', key: 'id' },
+    },
+    name: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -319,7 +328,7 @@ export const down: Migration = async ({
   await queryInterface.dropTable('address');
   await queryInterface.dropTable('product_category');
   await queryInterface.dropTable('product');
-  await queryInterface.dropTable('product_image');
+  await queryInterface.dropTable('image');
   await queryInterface.dropTable('cart');
   await queryInterface.dropTable('cart_product');
 };

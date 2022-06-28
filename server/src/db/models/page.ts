@@ -1,6 +1,7 @@
 import { Model, DataTypes } from 'sequelize';
 import { IPageAttributes, PageInput, PageStatus } from '../types/page';
 import { sequelize } from '../index';
+import slugify from 'slugify';
 
 class Page
   extends Model<IPageAttributes, PageInput>
@@ -43,6 +44,13 @@ Page.init(
     },
   },
   {
+    hooks: {
+      beforeValidate: async (page) => {
+        if (page.name) {
+          page.urlKey = (await generateSlug(page.name)) as string;
+        }
+      },
+    },
     sequelize,
     underscored: true,
     timestamps: true,
@@ -50,5 +58,10 @@ Page.init(
     tableName: 'page',
   }
 );
+
+// const generateSlug = (name: string) => slugify(name);
+
+const generateSlug = (name: string) =>
+  new Promise((resolve, _reject) => resolve(slugify(name, { lower: true })));
 
 export default Page;

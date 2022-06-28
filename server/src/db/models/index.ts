@@ -3,7 +3,7 @@ import Page from './page';
 import Address from './address';
 import ProductCategory from './productCategory';
 import Product from './product';
-import ProductImage from './productImage';
+import Image from './image';
 import Cart from './cart';
 import CartProduct from './cartProduct';
 import Session from './session';
@@ -24,10 +24,13 @@ CartProduct.hasMany(Product, { foreignKey: 'id' });
 ProductCategory.hasMany(Product, { foreignKey: 'productCategoryId' });
 Product.belongsTo(ProductCategory, { foreignKey: 'id' });
 
-Product.hasMany(ProductImage, { foreignKey: 'productId' });
-ProductImage.belongsTo(Product, { foreignKey: 'id' });
-
-// ProductImage.belongsToMany(ProductCategory, { through: Product });
+Product.hasMany(Image, {
+  foreignKey: {
+    name: 'productId',
+    allowNull: true,
+  },
+});
+Image.belongsTo(Product, { foreignKey: 'id' });
 
 export {
   User,
@@ -35,7 +38,7 @@ export {
   Address,
   ProductCategory,
   Product,
-  ProductImage,
+  Image,
   Cart,
   CartProduct,
   Session,

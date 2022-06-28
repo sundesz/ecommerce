@@ -17,7 +17,7 @@ import {
   authenticationRouter,
   pageRouter,
   productCategoryRouter,
-  productImageRouter,
+  imageRouter,
   productRouter,
   userRouter,
 } from './api/routers';
@@ -107,7 +107,7 @@ app.use('/api/v1/auth', authenticationRouter);
 app.use('/api/v1/user', userRouter);
 app.use('/api/v1/pages', pageRouter);
 app.use('/api/v1/product_categories', productCategoryRouter);
-app.use('/api/v1/product_images', productImageRouter);
+app.use('/api/v1/images', imageRouter);
 app.use('/api/v1/products', productRouter);
 
 app.use(unknownEndpoint);

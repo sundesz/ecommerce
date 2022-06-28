@@ -40,7 +40,7 @@ const getProductCategory: RequestHandler = async (
     }
 
     const categories = await ProductCategory.findAll({
-      attributes: ['categoryName', 'urlKey'],
+      attributes: ['name', 'urlKey'],
       include: [
         {
           model: Product,
@@ -67,10 +67,10 @@ const getOne: RequestHandler = (req, res, next: NextFunction) => {
 
 const create: RequestHandler = async (req, res, next: NextFunction) => {
   try {
-    const { categoryName } = req.body as ProductCategoryInput;
+    const { name } = req.body as ProductCategoryInput;
     const category = await ProductCategory.create({
-      categoryName,
-      urlKey: slugify(categoryName),
+      name,
+      urlKey: slugify(name),
     });
 
     res.json(category);
@@ -82,10 +82,10 @@ const create: RequestHandler = async (req, res, next: NextFunction) => {
 const update: RequestHandler = async (req, res, next: NextFunction) => {
   try {
     const productCategory = req.pageCategory as ProductCategory;
-    const { categoryName } = req.body as ProductCategoryInput;
+    const { name } = req.body as ProductCategoryInput;
 
-    productCategory.categoryName = categoryName || productCategory.categoryName;
-    productCategory.urlKey = slugify(categoryName);
+    productCategory.name = name || productCategory.name;
+    productCategory.urlKey = slugify(name);
 
     await productCategory.save();
 

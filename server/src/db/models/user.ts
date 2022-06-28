@@ -1,6 +1,7 @@
 import { Model, DataTypes } from 'sequelize';
 import { IUserAttributes, UserInput } from '../types/user';
 import { sequelize } from '../index';
+import bcrypt from 'bcrypt';
 
 class User
   extends Model<IUserAttributes, UserInput>
@@ -55,5 +56,17 @@ User.init(
     tableName: 'user',
   }
 );
+
+// https://sequelize.org/docs/v6/other-topics/hooks/
+User.beforeCreate(async (user) => {
+  if (user.password) {
+    user.password = await generatePasswordHash(user.password);
+  }
+});
+
+const generatePasswordHash = async function (password: string) {
+  const saltRounds = 10;
+  return await bcrypt.hash(password, saltRounds);
+};
 
 export default User;

@@ -1,21 +1,68 @@
 import express from 'express';
 import { ApolloServer } from 'apollo-server-express';
 import { DocumentNode } from 'graphql';
-import { Page, Product, ProductImage, ProductCategory } from 'db/models';
-import { resolvers, typeDefs } from './schema';
+import typeDefs from './graphql/typeDefs';
+import resolvers from './graphql/resolvers';
+import { Page, Product, ProductCategory, Image, User } from 'db/models';
 
 const startApolloServer = async (
-  typeDefs: DocumentNode,
-  resolvers: {
-    Query: {
-      pages: () => Promise<Page[]>;
-      products: () => Promise<Product[]>;
-      productImages: () => Promise<ProductImage[]>;
-      productCategories: () => Promise<ProductCategory[]>;
-    };
-  }
+  typeDefs: DocumentNode[],
+  resolvers: (
+    | {
+        Query: {
+          getPages: () => Promise<Page[] | undefined>;
+          getPage: (
+            _root: unknown,
+            { slug, id }: { slug: string; id: string }
+          ) => Promise<Page | null | undefined>;
+        };
+      }
+    | {
+        Query: {
+          getProducts: (
+            _root: unknown,
+            { slug }: { slug: string }
+          ) => Promise<Product[] | undefined>;
+        };
+      }
+    | {
+        Query: {
+          getProductCategories: () => Promise<ProductCategory[] | undefined>;
+          getProductCategory: (
+            _root: unknown,
+            { slug, id }: { slug: string; id: string }
+          ) => Promise<ProductCategory | null | undefined>;
+        };
+      }
+    | {
+        Query: {
+          getImages: (
+            _root: unknown,
+            {
+              slug,
+              // server.applyMiddleware({app, path: '/graphql'});
+              productId,
+            }: { slug: string; productId: string }
+          ) => Promise<Image[] | undefined>;
+        };
+      }
+    | {
+        Query: {
+          getUsers: () => Promise<User[] | undefined>;
+          getUser: (
+            _root: unknown,
+            { id, username }: { id: string; username: string }
+          ) => Promise<User | null | undefined>;
+        };
+      }
+  )[]
 ) => {
-  const server = new ApolloServer({ typeDefs, resolvers });
+  const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+    csrfPrevention: true,
+    introspection: true,
+  });
 
   const app = express();
   await server.start();
@@ -26,9 +73,41 @@ const startApolloServer = async (
     res.json({ data: 'api working' });
   });
 
-  app.listen({ port: 5000 }, () =>
-    console.log(`🚀 Server ready at http://localhost:5000${server.graphqlPath}`)
+  const PORT = process.env.PORT || 5000;
+  app.listen({ port: PORT }, () =>
+    console.log(
+      `🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`
+    )
   );
 };
 
 void startApolloServer(typeDefs, resolvers);
+
+// typeDefs: DocumentNode[],
+// resolvers: {
+//   Query: {
+//     getPages: () => Promise<Page[]>;
+//     getProducts: () => Promise<Product[]>;
+//     getImages: () => Promise<Image[]>;
+//     getProductCategories: () => Promise<ProductCategory[]>;
+//   };
+// }
+
+// typeDefs: DocumentNode[],
+// resolvers: (
+//   | { Query: { getPages: () => Promise<Page[] | undefined> } }
+//   | {
+//       Query: {
+//         getProducts: (
+//           _root: unknown,
+//           { slug }: { slug: string }
+//         ) => Promise<Product[] | undefined>;
+//       };
+//     }
+//   | {
+//       Query: {
+//         getProductCategories: () => Promise<ProductCategory[] | undefined>;
+//       };
+//     }
+//   | { Query: { getImages: () => Promise<Image[] | undefined> } }
+// )[]

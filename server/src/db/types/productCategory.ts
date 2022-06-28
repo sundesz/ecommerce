@@ -1,6 +1,6 @@
 export interface IProductCategoryAttributes {
   id: string;
-  categoryName: string;
+  name: string;
   urlKey?: string;
   createdAt?: Date;
   updatedAt?: Date;

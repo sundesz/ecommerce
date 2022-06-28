@@ -1,11 +1,11 @@
 import { NextFunction, RequestHandler } from 'express';
-import ProductImage from '../../db/models/productImage';
+import Image from '../../db/models/image';
 
 const getAll: RequestHandler = async (req, res, next: NextFunction) => {
   try {
     const { productId } = req.params as { productId: string };
-    const pImage = await ProductImage.findAll({
-      attributes: ['imageName', 'fileLocation'],
+    const pImage = await Image.findAll({
+      attributes: ['name', 'fileLocation'],
       where: { productId },
     });
     res.json(pImage);
