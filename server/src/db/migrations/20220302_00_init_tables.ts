@@ -102,11 +102,10 @@ export const up: Migration = async ({
       allowNull: false,
     },
     postcode: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        min: 5,
-        max: 5,
+        len: [5, 5],
       },
     },
     countrycode: {
@@ -259,11 +258,6 @@ export const up: Migration = async ({
       type: DataTypes.UUID,
       allowNull: true,
       references: { model: 'user', key: 'id' },
-    },
-    address_id: {
-      type: DataTypes.UUID,
-      allowNull: true,
-      references: { model: 'address', key: 'id' },
     },
     status: {
       type: DataTypes.ENUM('sold', 'pending', 'canceled'),

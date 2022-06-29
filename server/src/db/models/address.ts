@@ -11,8 +11,9 @@ class Address
   public email!: string;
   public street!: string;
   public city!: string;
-  public postcode!: number;
+  public postcode!: string;
   public countrycode!: string;
+  public country!: string;
 
   public readonly createAt!: Date;
   public readonly updateAt!: Date;
@@ -48,16 +49,29 @@ Address.init(
       allowNull: false,
     },
     postcode: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        min: 5,
-        max: 5,
+        len: [5, 5],
       },
     },
     countrycode: {
       type: DataTypes.STRING,
       defaultValue: 'FI',
+    },
+    country: {
+      type: DataTypes.VIRTUAL,
+      get() {
+        switch (this.countrycode) {
+          case 'FI':
+            return 'FINLAND';
+          default:
+            return this.countrycode;
+        }
+      },
+      set() {
+        throw new Error('Do not try to set the `Country` value!');
+      },
     },
   },
   {

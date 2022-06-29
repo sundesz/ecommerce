@@ -11,7 +11,8 @@ export default gql`
     street: String!
     city: String!
     postcode: String!
-    countrycode: String!
+    countrycode: String
+    country: String
     createdAt: String
     updatedAt: String
   }
@@ -19,10 +20,22 @@ export default gql`
   # ----------------
   # QUERIES
   # ----------------
+  extend type Query {
+    getAddress(userId: ID!): Address
+  }
 
   # ----------------
   # MUTATIONS
   # ----------------
+  extend type Mutation {
+    createAddress(
+      userId: ID!
+      email: String!
+      street: String!
+      city: String!
+      postcode: String!
+    ): Address!
+  }
 
   # ----------------
   # INPUT

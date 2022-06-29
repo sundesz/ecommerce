@@ -4,8 +4,9 @@ export interface IAddressAttributes {
   email: string;
   street: string;
   city: string;
-  postcode: number;
-  countrycode: string;
+  postcode: string;
+  countrycode?: string;
+  country?: string;
   createdAt?: Date;
   updatedAt?: Date;
 }

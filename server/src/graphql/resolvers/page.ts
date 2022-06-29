@@ -5,7 +5,7 @@ export default {
   Query: {
     getPages: async () => {
       try {
-        return await Page.findAll({});
+        return await Page.findAll({ order: [['updatedAt', 'DESC']] });
       } catch (error: unknown) {
         if (error instanceof Error) {
           throw new Error(error.message);

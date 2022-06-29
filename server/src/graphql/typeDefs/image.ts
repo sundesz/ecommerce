@@ -19,7 +19,12 @@ export default gql`
   # QUERIES
   # ----------------
   extend type Query {
-    getImages(slug: String, productId: String): [Image!]!
+    getImages(
+      productId: String
+      productUrlKey: String
+      productCategoryId: String
+      productCategoryUrlKey: String
+    ): [Image!]!
   }
 
   # ----------------

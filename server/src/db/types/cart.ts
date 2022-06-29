@@ -10,7 +10,6 @@ export interface ICartAttributes {
   id?: string;
   sessionId?: string;
   userId?: string;
-  addressId: string;
   email?: string;
   userAgent: string;
   ipAddress: string;

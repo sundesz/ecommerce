@@ -8,13 +8,11 @@ import Cart from './cart';
 import CartProduct from './cartProduct';
 import Session from './session';
 
-User.hasOne(Address);
+User.hasOne(Address, { onDelete: 'CASCADE' });
 Address.belongsTo(User);
 
 User.hasMany(Cart);
 Cart.belongsTo(User);
-
-Cart.hasMany(Address);
 
 Cart.hasMany(CartProduct);
 CartProduct.belongsTo(Cart);
@@ -24,7 +22,14 @@ CartProduct.hasMany(Product, { foreignKey: 'id' });
 ProductCategory.hasMany(Product, { foreignKey: 'productCategoryId' });
 Product.belongsTo(ProductCategory, { foreignKey: 'id' });
 
+ProductCategory.hasMany(Image, {
+  onDelete: 'CASCADE',
+  foreignKey: 'productCategoryId',
+});
+Image.belongsTo(ProductCategory, { foreignKey: 'id' });
+
 Product.hasMany(Image, {
+  onDelete: 'CASCADE',
   foreignKey: {
     name: 'productId',
     allowNull: true,

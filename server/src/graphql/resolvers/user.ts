@@ -1,11 +1,24 @@
-import { UserInput } from 'db/types';
-import { User } from '../../db/models';
+import { IUserInput } from 'db/types';
+import { Address, User } from '../../db/models';
 
 export default {
   Query: {
+    count: async () => {
+      try {
+        return await User.count();
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          throw new Error(error.message);
+        }
+      }
+    },
+
     getUsers: async () => {
       try {
-        return await User.findAll();
+        return await User.findAll({
+          include: [{ model: Address }],
+          order: [['updatedAt', 'DESC']],
+        });
       } catch (error: unknown) {
         if (error instanceof Error) {
           throw new Error(error.message);
@@ -40,9 +53,21 @@ export default {
   },
 
   Mutation: {
-    createUser: async (_root: unknown, inputs: UserInput) => {
+    createUser: async (_root: unknown, inputs: IUserInput) => {
       try {
-        return await User.create({ ...inputs });
+        const user = await User.create({
+          name: inputs.name,
+          username: inputs.username,
+          password: inputs.password,
+          isDisabled: inputs.isDisabled,
+          isAdmin: inputs.isAdmin,
+        });
+
+        if (inputs.address) {
+          await Address.create({ ...inputs.address, userId: user.id });
+        }
+
+        return user;
       } catch (error: unknown) {
         if (error instanceof Error) {
           throw new Error(error.message);

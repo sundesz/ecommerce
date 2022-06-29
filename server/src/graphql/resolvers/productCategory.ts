@@ -1,5 +1,5 @@
-import { ProductCategoryInput } from 'db/types';
-import { Product, ProductCategory } from '../../db/models';
+import { IProductCategoryInput } from 'db/types';
+import { Image, Product, ProductCategory } from '../../db/models';
 
 export default {
   Query: {
@@ -11,7 +11,12 @@ export default {
             {
               model: Product,
             },
+            {
+              model: Image,
+              attributes: ['name', 'fileLocation'],
+            },
           ],
+          order: [['updatedAt', 'DESC']],
         });
       } catch (error: unknown) {
         if (error instanceof Error) {
@@ -55,10 +60,21 @@ export default {
   Mutation: {
     createProductCategory: async (
       _root: unknown,
-      { name }: ProductCategoryInput
+      { input }: { input: IProductCategoryInput }
     ) => {
       try {
-        return await ProductCategory.create({ name });
+        const { name, image, imageLocation } = input;
+        const productCategory = await ProductCategory.create({ name });
+
+        if (image) {
+          await Image.create({
+            productCategoryId: productCategory.id,
+            name: image,
+            fileLocation: imageLocation ?? '',
+          });
+        }
+
+        return productCategory;
       } catch (error: unknown) {
         if (error instanceof Error) {
           throw new Error(error.message);

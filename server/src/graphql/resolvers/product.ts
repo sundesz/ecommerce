@@ -32,6 +32,7 @@ export default {
             },
           ],
           where,
+          order: [['updatedAt', 'DESC']],
         });
 
         return products;
@@ -66,12 +67,14 @@ export default {
         });
 
         if (args.image) {
-          return await Image.create({
+          await Image.create({
             productId: product.id,
             name: args.image,
             fileLocation: args.imageLocation ?? '',
           });
         }
+
+        return product;
       } catch (error: unknown) {
         if (error instanceof Error) {
           throw new Error(error.message);

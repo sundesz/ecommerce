@@ -35,8 +35,8 @@ export default gql`
       name: String!
       description: String!
       ean: String!
-      price: Int!
-      quantity: Int!
+      price: Float!
+      quantity: Float!
       image: String
       imageLocation: String
     ): Product!

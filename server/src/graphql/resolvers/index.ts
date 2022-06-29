@@ -3,8 +3,10 @@ import productResolver from './product';
 import productCategoryResolver from './productCategory';
 import imageResolver from './image';
 import userResolver from './user';
+import addressResolver from './address';
 
 export default [
+  addressResolver,
   pageResolver,
   productResolver,
   productCategoryResolver,

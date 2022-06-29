@@ -9,7 +9,6 @@ class Cart
   public id!: string;
   public sessionId!: string;
   public userId!: string;
-  public addressId!: string;
   public email!: string;
   public userAgent!: string;
   public ipAddress!: string;
@@ -29,7 +28,7 @@ Cart.init(
     },
     sessionId: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true, // false
       unique: true,
       references: { model: 'session', key: 'sid' },
     },
@@ -37,11 +36,6 @@ Cart.init(
       type: DataTypes.UUID,
       allowNull: true,
       references: { model: 'user', key: 'id' },
-    },
-    addressId: {
-      type: DataTypes.UUID,
-      allowNull: true,
-      references: { model: 'address', key: 'id' },
     },
     email: {
       type: DataTypes.STRING,

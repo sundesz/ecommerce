@@ -10,6 +10,7 @@ export default gql`
     name: String!
     urlKey: String!
     Products: [Product]!
+    Image: [Image]
     createdAt: String
     updatedAt: String
   }
@@ -28,10 +29,15 @@ export default gql`
   # ----------------
 
   extend type Mutation {
-    createProductCategory(name: String!): ProductCategory!
+    createProductCategory(input: CreateProductCategoryInput): ProductCategory!
   }
 
   # ----------------
   # INPUT
   # ----------------
+  input CreateProductCategoryInput {
+    name: String!
+    image: String
+    imageLocation: String
+  }
 `;
