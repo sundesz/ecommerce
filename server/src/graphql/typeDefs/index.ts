@@ -5,6 +5,7 @@ import pageSchema from './page';
 import productSchema from './product';
 import productCategorySchema from './productCategory';
 import imageSchema from './image';
+import cartSchema from './cart';
 
 const linkedSchema = gql`
   type Query {
@@ -24,4 +25,5 @@ export default [
   productSchema,
   productCategorySchema,
   imageSchema,
+  cartSchema,
 ];

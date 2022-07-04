@@ -49,6 +49,12 @@ CartProduct.init(
     timestamps: true,
     freezeTableName: true,
     tableName: 'cart_product',
+    indexes: [
+      {
+        unique: true,
+        fields: ['cartId', 'productId'],
+      },
+    ],
   }
 );
 

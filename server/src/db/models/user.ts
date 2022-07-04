@@ -2,6 +2,7 @@ import { Model, DataTypes } from 'sequelize';
 import { IUserAttributes, UserInput } from '../types/user';
 import { sequelize } from '../index';
 import bcrypt from 'bcrypt';
+import { SALT_ROUND } from '../../config';
 
 class User
   extends Model<IUserAttributes, UserInput>
@@ -65,8 +66,7 @@ User.beforeCreate(async (user) => {
 });
 
 const generatePasswordHash = async function (password: string) {
-  const saltRounds = 10;
-  return await bcrypt.hash(password, saltRounds);
+  return await bcrypt.hash(password, SALT_ROUND);
 };
 
 export default User;

@@ -4,6 +4,7 @@ import productCategoryResolver from './productCategory';
 import imageResolver from './image';
 import userResolver from './user';
 import addressResolver from './address';
+import cartResolver from './cart';
 
 export default [
   addressResolver,
@@ -12,6 +13,7 @@ export default [
   productCategoryResolver,
   imageResolver,
   userResolver,
+  cartResolver,
 ];
 
 // const resolvers = {

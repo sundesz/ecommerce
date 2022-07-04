@@ -21,4 +21,13 @@ export interface IUserInput {
   address: AddressInput;
 }
 
+export interface IUserUpdateInput {
+  userId?: string;
+  name?: string;
+  username?: string;
+  password?: string;
+  isAdmin?: boolean;
+  isDisabled?: boolean;
+}
+
 export type UserInput = Omit<IUserAttributes, 'id'>;

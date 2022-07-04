@@ -34,7 +34,7 @@ Cart.init(
     },
     userId: {
       type: DataTypes.UUID,
-      allowNull: true,
+      allowNull: false,
       references: { model: 'user', key: 'id' },
     },
     email: {

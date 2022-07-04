@@ -40,6 +40,18 @@ export default gql`
       image: String
       imageLocation: String
     ): Product!
+
+    updateProduct(
+      productId: ID!
+      productCategory: String
+      name: String
+      description: String
+      ean: String
+      price: Float
+      quantity: Float
+      image: String
+      imageLocation: String
+    ): Product!
   }
 
   # ----------------

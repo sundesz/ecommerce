@@ -6,7 +6,7 @@ class Address
   extends Model<IAddressAttributes, AddressInput>
   implements IAddressAttributes
 {
-  public id!: string;
+  declare id: string;
   public userId!: string;
   public email!: string;
   public street!: string;
@@ -17,6 +17,15 @@ class Address
 
   public readonly createAt!: Date;
   public readonly updateAt!: Date;
+
+  getFullName() {
+    switch (this.countrycode) {
+      case 'FI':
+        return 'FINLAND';
+      default:
+        return this.countrycode;
+    }
+  }
 }
 
 Address.init(

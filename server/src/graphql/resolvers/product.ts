@@ -1,4 +1,4 @@
-import { IProductInput } from 'db/types';
+import { IProductInput, IProductUpdateInput } from '../../db/types';
 import { Sequelize } from 'sequelize';
 import { Product, ProductCategory, Image } from '../../db/models';
 
@@ -70,7 +70,7 @@ export default {
           await Image.create({
             productId: product.id,
             name: args.image,
-            fileLocation: args.imageLocation ?? '',
+            fileLocation: args.imageLocation,
           });
         }
 
@@ -80,6 +80,43 @@ export default {
           throw new Error(error.message);
         }
       }
+    },
+
+    updateProduct: async (_root: unknown, args: IProductUpdateInput) => {
+      const product = await Product.findOne({ where: { id: args.productId } });
+
+      if (!product) {
+        throw new Error('Product not found');
+      }
+
+      let productCategory = await ProductCategory.findOne({
+        where: { name: args.productCategory },
+      });
+
+      if (!productCategory && args.productCategory) {
+        productCategory = await ProductCategory.create({
+          name: args.productCategory,
+        });
+      }
+
+      await product.update({
+        name: args.name ?? product.name,
+        description: args.description ?? product.description,
+        price: args.price ?? product.price,
+        quantity: args.quantity ?? product.quantity,
+        ean: args.ean ?? product.ean,
+        productCategoryId: productCategory?.id,
+      });
+
+      if (args.image) {
+        await Image.create({
+          productId: product.id,
+          name: args.image,
+          fileLocation: args.imageLocation ?? '',
+        });
+      }
+
+      return product;
     },
   },
 };

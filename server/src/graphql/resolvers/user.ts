@@ -1,5 +1,7 @@
-import { IUserInput } from 'db/types';
+import bcrypt from 'bcrypt';
+import { IUserInput, IUserUpdateInput } from '../../db/types';
 import { Address, User } from '../../db/models';
+import { SALT_ROUND } from '../../config';
 
 export default {
   Query: {
@@ -53,21 +55,57 @@ export default {
   },
 
   Mutation: {
-    createUser: async (_root: unknown, inputs: IUserInput) => {
+    createUser: async (_root: unknown, { input }: { input: IUserInput }) => {
       try {
         const user = await User.create({
-          name: inputs.name,
-          username: inputs.username,
-          password: inputs.password,
-          isDisabled: inputs.isDisabled,
-          isAdmin: inputs.isAdmin,
+          name: input.name,
+          username: input.username,
+          password: input.password,
+          isDisabled: input.isDisabled ?? false,
+          isAdmin: input.isAdmin ?? false,
         });
 
-        if (inputs.address) {
-          await Address.create({ ...inputs.address, userId: user.id });
+        if (input.address) {
+          await Address.create({ ...input.address, userId: user.id });
         }
 
         return user;
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          throw new Error(error.message);
+        }
+      }
+    },
+
+    updateUser: async (
+      _root: unknown,
+      { input }: { input: IUserUpdateInput }
+    ) => {
+      try {
+        if (!input.userId || !input.username) {
+          throw new Error('Please provide user id or username');
+        }
+
+        const user = await User.findOne({
+          where: { id: input.userId, username: input.username },
+        });
+
+        if (!user) {
+          throw new Error('User not found');
+        }
+
+        let password = user.password;
+        if (input.password) {
+          password = await bcrypt.hash(input.password, SALT_ROUND);
+        }
+
+        return await user.update({
+          name: input.name ?? user.name,
+          username: input.username ?? user.username,
+          password,
+          isAdmin: input.isAdmin ?? user.isAdmin,
+          isDisabled: input.isDisabled ?? user.isDisabled,
+        });
       } catch (error: unknown) {
         if (error instanceof Error) {
           throw new Error(error.message);

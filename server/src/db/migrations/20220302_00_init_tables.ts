@@ -250,13 +250,12 @@ export const up: Migration = async ({
     },
     session_id: {
       type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
+      allowNull: true,
       references: { model: 'session', key: 'sid' },
     },
     user_id: {
       type: DataTypes.UUID,
-      allowNull: true,
+      allowNull: false,
       references: { model: 'user', key: 'id' },
     },
     status: {
@@ -273,6 +272,7 @@ export const up: Migration = async ({
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+      //      defaultValue: DataTypes.NOW
     },
   });
 

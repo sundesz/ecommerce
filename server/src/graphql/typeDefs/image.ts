@@ -30,6 +30,21 @@ export default gql`
   # ----------------
   # MUTATIONS
   # ----------------
+  extend type Mutation {
+    createImage(
+      productId: String
+      productCategoryId: String
+      name: String!
+      fileLocation: String!
+    ): Image!
+
+    updateImage(
+      productId: String
+      productCategoryId: String
+      name: String!
+      fileLocation: String!
+    ): Image!
+  }
 
   # ----------------
   # INPUT

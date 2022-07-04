@@ -33,16 +33,36 @@ export default gql`
   # MUTATIONS
   # ----------------
   extend type Mutation {
-    createUser(
-      username: String!
-      name: String!
-      password: String!
-      isAdmin: Boolean
-      isDisabled: Boolean
-    ): User!
+    createUser(input: CreateUserInput): User!
+    updateUser(input: UpdateUserInput): User!
   }
 
   # ----------------
   # INPUT
   # ----------------
+  input CreateUserInput {
+    username: String!
+    name: String!
+    password: String!
+    isAdmin: Boolean
+    isDisabled: Boolean
+    address: CreateAddressInput
+  }
+
+  input CreateAddressInput {
+    email: String!
+    street: String!
+    city: String!
+    postcode: String!
+    countrycode: String
+  }
+
+  input UpdateUserInput {
+    userId: String
+    username: String
+    name: String
+    password: String
+    isAdmin: Boolean
+    isDisabled: Boolean
+  }
 `;

@@ -22,4 +22,16 @@ export interface IProductInput {
   imageLocation: string;
 }
 
+export interface IProductUpdateInput {
+  productId: string;
+  productCategory?: string;
+  name?: string;
+  description?: string;
+  ean?: string;
+  price?: number;
+  quantity?: number;
+  image?: string;
+  imageLocation?: string;
+}
+
 export type ProductInput = Omit<IProductAttributes, 'id'>;

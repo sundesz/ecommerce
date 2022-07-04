@@ -13,3 +13,15 @@ export interface IAddressAttributes {
 
 // export interface IAddressInput extends Optional<IAddress, 'id'> {}
 export type AddressInput = Omit<IAddressAttributes, 'id'>;
+
+export interface IAddressUpdateAttributes {
+  userId: string;
+  email?: string;
+  street?: string;
+  city?: string;
+  postcode?: string;
+  countrycode?: string;
+  country?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+}

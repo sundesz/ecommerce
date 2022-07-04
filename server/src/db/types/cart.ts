@@ -19,3 +19,29 @@ export interface ICartAttributes {
 }
 
 export type CartInput = Omit<ICartAttributes, 'id'>;
+
+export interface ICartProductAttributes {
+  cartId: string;
+  productId: string;
+  price: number;
+  quantity: number;
+}
+
+export interface ICartInputAttributes {
+  sessionId?: string;
+  userId: string;
+  userAgent: string;
+  ipAddress: string;
+  status: CartStatus;
+  email?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+  cartProduct: ICartProductAttributes;
+}
+
+export interface ICartUpdateAttributes {
+  cartId: string;
+  status?: CartStatus;
+  email?: string;
+  cartProduct?: ICartProductAttributes;
+}

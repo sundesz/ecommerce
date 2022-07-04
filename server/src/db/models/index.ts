@@ -18,13 +18,17 @@ Cart.hasMany(CartProduct);
 CartProduct.belongsTo(Cart);
 
 CartProduct.hasMany(Product, { foreignKey: 'id' });
+Product.belongsTo(CartProduct, { foreignKey: 'id' });
 
 ProductCategory.hasMany(Product, { foreignKey: 'productCategoryId' });
 Product.belongsTo(ProductCategory, { foreignKey: 'id' });
 
 ProductCategory.hasMany(Image, {
   onDelete: 'CASCADE',
-  foreignKey: 'productCategoryId',
+  foreignKey: {
+    name: 'productCategoryId',
+    allowNull: true,
+  },
 });
 Image.belongsTo(ProductCategory, { foreignKey: 'id' });
 

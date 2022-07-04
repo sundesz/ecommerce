@@ -4,12 +4,13 @@ import { DocumentNode } from 'graphql';
 import typeDefs from './graphql/typeDefs';
 import resolvers from './graphql/resolvers';
 import {
+  Address,
   Page,
   Product,
   ProductCategory,
   Image,
   User,
-  Address,
+  Cart,
 } from 'db/models';
 import {
   AddressInput,
@@ -19,6 +20,12 @@ import {
   IProductCategoryInput,
   IImageSearchAttributes,
   IUserInput,
+  ICartInputAttributes,
+  ICartUpdateAttributes,
+  IAddressUpdateAttributes,
+  IImageAttributes,
+  IProductUpdateInput,
+  IUserUpdateInput,
 } from 'db/types';
 
 const startApolloServer = async (
@@ -26,12 +33,19 @@ const startApolloServer = async (
   resolvers: (
     | {
         Query: {
-          getAddress: (userId: string) => Promise<Address | null | undefined>;
+          getAddress: (
+            _root: unknown,
+            { userId }: { userId: string }
+          ) => Promise<Address | null | undefined>;
         };
         Mutation: {
           createAddress: (
             _root: unknown,
             { userId, email, street, city, postcode }: AddressInput
+          ) => Promise<Address | undefined>;
+          updateAddress: (
+            _root: unknown,
+            { userId, email, street, city, postcode }: IAddressUpdateAttributes
           ) => Promise<Address | undefined>;
         };
       }
@@ -51,7 +65,11 @@ const startApolloServer = async (
           updatePage: (
             _root: unknown,
             { id, name, content, status, urlKey }: IPageAttributes
-          ) => Promise<Page | 'No page found' | undefined>;
+          ) => Promise<Page | undefined>;
+          deletePage: (
+            _root: unknown,
+            { id }: { id: string }
+          ) => Promise<number | undefined>;
         };
       }
     | {
@@ -59,13 +77,17 @@ const startApolloServer = async (
           getProducts: (
             _root: unknown,
             { slug }: { slug: string }
-          ) => Promise<Product[] | undefined>; //     getProducts: () => Promise<Product[]>;
+          ) => Promise<Product[] | undefined>;
         };
         Mutation: {
           createProduct: (
             _root: unknown,
             args: IProductInput
           ) => Promise<Product | undefined>;
+          updateProduct: (
+            _root: unknown,
+            args: IProductUpdateInput
+          ) => Promise<Product>;
         };
       }
     | {
@@ -73,12 +95,19 @@ const startApolloServer = async (
           getProductCategories: () => Promise<ProductCategory[] | undefined>;
           getProductCategory: (
             _root: unknown,
-            { slug, id }: { slug: string; id: string }
+            {
+              slug,
+              id,
+            }: {
+              slug: string;
+              id: string;
+            }
           ) => Promise<ProductCategory | null | undefined>;
         };
         Mutation: {
           createProductCategory: (
             _root: unknown,
+
             { input }: { input: IProductCategoryInput }
           ) => Promise<ProductCategory | undefined>;
         };
@@ -95,6 +124,26 @@ const startApolloServer = async (
             }: IImageSearchAttributes
           ) => Promise<Image[] | undefined>;
         };
+        Mutation: {
+          createImage: (
+            _root: unknown,
+            {
+              productId,
+              productCategoryId,
+              name,
+              fileLocation,
+            }: IImageAttributes
+          ) => Promise<Image | undefined>;
+          updateImage: (
+            _root: unknown,
+            {
+              productId,
+              productCategoryId,
+              name,
+              fileLocation,
+            }: IImageAttributes
+          ) => Promise<Image | undefined>;
+        };
       }
     | {
         Query: {
@@ -108,8 +157,30 @@ const startApolloServer = async (
         Mutation: {
           createUser: (
             _root: unknown,
-            inputs: IUserInput
+            { input }: { input: IUserInput }
           ) => Promise<User | undefined>;
+          updateUser: (
+            _root: unknown,
+            { input }: { input: IUserUpdateInput }
+          ) => Promise<User | undefined>;
+        };
+      }
+    | {
+        Query: {
+          getCart: (
+            _root: unknown,
+            { cartId }: { cartId: string }
+          ) => Promise<Cart | null | undefined>;
+        };
+        Mutation: {
+          createCart: (
+            _root: unknown,
+            { input }: { input: ICartInputAttributes }
+          ) => Promise<Cart | undefined>;
+          updateCart: (
+            _root: unknown,
+            { updateInput }: { updateInput: ICartUpdateAttributes }
+          ) => Promise<Cart | null | undefined>;
         };
       }
   )[]

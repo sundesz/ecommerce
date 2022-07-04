@@ -12,3 +12,5 @@ export const SALT = process.env.SALT || 10;
 
 export const SECRET_KEY = process.env.SECRET_KEY as string;
 export const COOKIE_EXPIRE_TIME = 60 * 60 * 1000;
+
+export const SALT_ROUND = 10;

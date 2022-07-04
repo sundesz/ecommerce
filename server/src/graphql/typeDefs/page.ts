@@ -4,7 +4,6 @@ export default gql`
   # ----------------
   # ENUMS
   # ----------------
-
   enum PageStatus {
     header
     menu
@@ -51,7 +50,9 @@ export default gql`
       content: String!
       status: PageStatus!
       urlKey: String
-    ): Page
+    ): Page!
+
+    deletePage(id: ID!): Boolean
   }
 
   # ----------------

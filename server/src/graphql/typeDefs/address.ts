@@ -35,6 +35,14 @@ export default gql`
       city: String!
       postcode: String!
     ): Address!
+
+    updateAddress(
+      userId: ID!
+      email: String
+      street: String
+      city: String
+      postcode: String
+    ): Address!
   }
 
   # ----------------

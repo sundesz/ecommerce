@@ -43,8 +43,6 @@ export default {
       { name, content, status, urlKey }: PageInput
     ) => {
       try {
-        console.log(name, content, status, urlKey);
-
         return await Page.create({ name, content, status, urlKey });
       } catch (error: unknown) {
         if (error instanceof Error) {
@@ -67,8 +65,17 @@ export default {
 
           return await page.save();
         }
+        throw new Error('No page found');
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          throw new Error(error.message);
+        }
+      }
+    },
 
-        return 'No page found';
+    deletePage: async (_root: unknown, { id }: { id: string }) => {
+      try {
+        return await Page.destroy({ where: { id } });
       } catch (error: unknown) {
         if (error instanceof Error) {
           throw new Error(error.message);
